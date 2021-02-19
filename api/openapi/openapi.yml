@@ -1,0 +1,183 @@
+openapi: 3.0.0
+info:
+  title: Storage service API
+  description: Storage service is an API that provides access to the documents, images... of all other services.
+  version: 0.1.0
+
+servers:
+  - url: http://localhost:5000
+    description: Local developement server
+
+paths:
+  /api/storage/download:
+    get:
+      operationId: api.controllers.object_urls.get_download_url
+      summary: Return a signed download url.
+      tags:
+        - Object Urls
+      parameters:
+        - name: object_id
+          in: query
+          description: object (document, image) id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A download url string
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: 'https://storage.com/123'
+        '400':
+          description: Invalid input
+        '500': 
+          description: Internal Server Error
+  /api/storage/upload:
+    get:
+      operationId: api.controllers.object_urls.get_upload_url
+      summary: Return a signed upload url.
+      tags:
+        - Object Urls
+      parameters:
+        - name: extension
+          in: query
+          description: file extension for which upload url is requested
+          required: true
+          schema:
+            type: string
+            enum: [jpg, jpeg, png, pdf]
+        - name: object_type
+          in: query
+          description: object type (document, image)
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A json object containing upload url
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Upload'
+        '400':
+          description: Invalid input
+        '500': 
+          description: Internal Server Error
+  /api/storage/upload/{id}:
+    put:
+      operationId: api.controllers.object_urls.update_upload_url
+      summary: Update an upload state
+      tags:
+        - Object Urls
+      parameters:
+        - name: id
+          in: path
+          description: upload url id
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: upload object with new status
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              $ref: '#/components/schemas/Upload'
+      responses:
+        '204':
+          description: Url updated
+  /api/storage/object_types:
+    get:
+      operationId: api.controllers.object_types.get
+      summary: Get the list of object types
+      tags:
+        - Object types
+      responses:
+        '200':
+          description: List of object types
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ObjectType'
+        '400':
+          description: Invalid input
+        '500': 
+          description: Internal Server Error
+  /api/storage/allowed_to_download:
+    post:
+      operationId: api.controllers.privacy.grant_download_url
+      summary: Grant right to generate a download url for an object 
+      tags:
+        - Privacy
+      requestBody:
+        description: Allowance object
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: allowed_to_download
+              type: object
+              $ref: '#/components/schemas/AllowedToDownload'
+      responses:
+        '204':
+          description: Right granted succesfully
+components:
+  schemas:
+    Upload:
+      type: object
+      properties:
+        id:
+          type: string
+        url:
+          type: string
+        fields:
+          type: object
+          $ref: '#/components/schemas/UploadUrlFields'
+        status:
+          type: object
+          $ref: '#/components/schemas/Status'
+    Status:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+          enum: [requested, uploaded]
+    ObjectType:
+      type: object
+      properties:
+        id:
+          type: integer
+        label:
+          type: string
+    UploadUrlFields:
+      type: object
+      properties:
+        key:
+          type: string
+        x-amz-algorithm:
+          type: string
+        x-amz-credential:
+          type: string
+        x-amz-date:
+          type: string
+        policy:
+          type: string
+        x-amz-signature:
+          type: string
+    AllowedToDownload:
+        type: object
+        properties:
+          object_id:
+            type: integer
+          allowed_user_id:
+            type: integer
+          allowed_user_type:
+            type: string
