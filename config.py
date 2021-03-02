@@ -18,7 +18,8 @@ class DevelopmentConfig(Config):
     SQLALCHEMY_ECHO = True
     S3_BUCKET="ecomsaas-product-images"
     S3_KEY="AKIA44CDV2GNB2HJQYNI"
-    S3_SECRET="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"    
+    S3_SECRET="bSluUD+zMJmVvvbm0oKMg0oLJvwHt7lMkM2PJ09E"   
+    REDIS_URL = 'redis://:redispass2021@localhost/0'
 
 
 class TestingConfig(Config):
@@ -32,6 +33,7 @@ class TestingConfig(Config):
     S3_BUCKET="ecomsaas-product-images"
     S3_KEY="AKIA44CDV2GNB2HJQYNI"
     S3_SECRET="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"
+    REDIS_URL = 'redis://:redispass2021@localhost/0'
 
 
 class ProductionConfig(Config):

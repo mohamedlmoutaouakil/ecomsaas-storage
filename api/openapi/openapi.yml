@@ -34,6 +34,8 @@ paths:
           description: Invalid input
         '500': 
           description: Internal Server Error
+      security:
+      - jwt: []
   /api/storage/upload:
     get:
       operationId: api.controllers.object_urls.get_upload_url
@@ -50,7 +52,7 @@ paths:
             enum: [jpg, jpeg, png, pdf]
         - name: object_type
           in: query
-          description: object type (document, image)
+          description: object type (PRODUCT_IMAGE = 1, PACKAGE_IMAGE = 2, CIN_IMAGE = 3, USER_AVATAR = 4, CONTRACT = 5)
           required: true
           schema:
             type: integer
@@ -66,6 +68,8 @@ paths:
           description: Invalid input
         '500': 
           description: Internal Server Error
+      security:
+      - jwt: []
   /api/storage/upload/{id}:
     put:
       operationId: api.controllers.object_urls.update_upload_url
@@ -90,6 +94,8 @@ paths:
       responses:
         '204':
           description: Url updated
+      security:
+      - jwt: []
   /api/storage/object_types:
     get:
       operationId: api.controllers.object_types.get
@@ -109,6 +115,8 @@ paths:
           description: Invalid input
         '500': 
           description: Internal Server Error
+      security:
+      - jwt: []
   /api/storage/allowed_to_download:
     post:
       operationId: api.controllers.privacy.grant_download_url
@@ -127,6 +135,8 @@ paths:
       responses:
         '204':
           description: Right granted succesfully
+      security:
+      - jwt: []
 components:
   schemas:
     Upload:
@@ -181,3 +191,9 @@ components:
             type: integer
           allowed_user_type:
             type: string
+  securitySchemes:
+    jwt:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      x-bearerInfoFunc: api.auth.token_handler_for_connexion

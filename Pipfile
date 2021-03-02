@@ -13,6 +13,9 @@ flask-script = "*"
 connexion = {extras = ["swagger-ui"], version = "*"}
 boto3 = "*"
 botocore = "*"
+pyjwt = "*"
+redis = "*"
+cryptography = "*"
 
 [requires]
 python_version = "3.8"
