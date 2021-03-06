@@ -19,7 +19,7 @@ class DevelopmentConfig(Config):
     S3_BUCKET="ecomsaas-product-images"
     S3_KEY="AKIA44CDV2GNB2HJQYNI"
     S3_SECRET="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"   
-    REDIS_URL = 'redis://:redispass2021@localhost/0'
+    REDIS_URL = 'redis://redis:6379/0'
 
 
 class TestingConfig(Config):
