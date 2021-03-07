@@ -43,3 +43,16 @@ def update_upload_url_status(upload_url_id, new_status_id, current_user_id):
   s3_object = S3Object.load_from_upload_url(upload_url=upload_url, object_size=object_size)
   db.session.add(s3_object)
   db.session.commit()
+
+def get_s3_object_info_by_id(object_id, current_user_id, current_user_type):
+  s3_object = S3Object.query.filter(
+    S3Object.id == object_id, 
+    S3Object.owner_user_id == current_user_id
+  ).one_or_none()
+  if s3_object is None:
+    raise NotFoundException('Storage Object Not Found.')
+  return {
+    "id": s3_object.id,
+    "object_type": s3_object.object_type.dump(),
+    "created_at": s3_object.created_at
+  }

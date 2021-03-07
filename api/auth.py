@@ -13,7 +13,7 @@ def get_jwks():
   if current_app.redis_client.exists("users_service.last_pubkey_version"):
     if_none_match = current_app.redis_client.get("users_service.last_pubkey_version")
 
-  resp = requests.get(AUTH_SERVICE_URL + JWKS_ENDPOINT, headers={'If-None-Match' : if_none_match})
+  resp = requests.get(current_app.config['AUTH_SERVICE_URL'] + JWKS_ENDPOINT, headers={'If-None-Match' : if_none_match})
   if resp.status_code not in [200, 304]:
     raise Exception('Error getting public key from authentication service')
   if resp.status_code == 200:

@@ -137,6 +137,35 @@ paths:
           description: Right granted succesfully
       security:
       - jwt: []
+  /api/storage/objects/{object_id}:
+    get:
+      operationId: api.controllers.objects.get_object_by_id
+      summary: Get storage object information by id
+      tags:
+        - Objects
+      parameters:
+        - name: object_id
+          in: path
+          description: object id
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: storage object
+          content:
+            application/json:
+              schema:
+                type: object
+                $ref: '#/components/schemas/Object'
+        '400':
+          description: Bad Request 
+        '404':
+          description: Not Found
+        '500': 
+          description: Internal Server Error
+      security:
+      - jwt: []
 components:
   schemas:
     Upload:
@@ -191,6 +220,16 @@ components:
             type: integer
           allowed_user_type:
             type: string
+    Object:
+      type: object
+      properties:
+        id:
+          type: integer
+        object_type:
+          type: object
+          $ref: '#/components/schemas/ObjectType'
+        created_at:
+          type: string
   securitySchemes:
     jwt:
       type: http

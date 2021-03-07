@@ -20,6 +20,7 @@ class DevelopmentConfig(Config):
     S3_KEY="AKIA44CDV2GNB2HJQYNI"
     S3_SECRET="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"   
     REDIS_URL = 'redis://redis:6379/0'
+    AUTH_SERVICE_URL = 'http://authentication:5000'
 
 
 class TestingConfig(Config):
